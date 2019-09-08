@@ -21,6 +21,8 @@ namespace CPZ_2
         //make month cash by employye salary
         private void make_cash()
         {
+            this.avg_month_cash = 0;
+
             foreach (var i in this.employees)
                 this.avg_month_cash += i.Salary * 2.8;
 
@@ -76,10 +78,17 @@ namespace CPZ_2
         //delete employee and info about him
         public void delete_employee(Employee _employee)
         {
-            this.employees.Remove(_employee);
-            this.employee_amount--;
-            this.salary -= _employee.Salary;
-            this.make_cash();
+            try
+            {
+                this.employees.Remove(_employee);
+                this.employee_amount--;
+                this.salary -= _employee.Salary;
+                this.make_cash();
+            }
+            catch
+            {
+                return;
+            }
         }
 
         //try add employee, if false - throw error. if true add information in shop

@@ -21,17 +21,13 @@ namespace CPZ_2
             this.ClientSize = new Size(290, 290);
         }
 
-        private void InitLables()
+        private void InitObjects()
         {
             this.Tax.Text = Convert.ToString(this.current_shop.annual_tax());
             this.MonthProfit.Text = Convert.ToString(this.current_shop.profit(1));
             this.YearProfit.Text = Convert.ToString(this.current_shop.profit());
-
-        }
-
-        private void InitListBox()
-        {
             this.EmployeeList.Items.Clear();
+
             foreach (var i in current_shop.Employees)
             {
                 this.EmployeeList.Items.Add(i);
@@ -87,21 +83,43 @@ namespace CPZ_2
 
         private void ShopList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.current_shop = this.ShopList.SelectedItem as CarShop;
-            this.CurrentShop.Text = this.current_shop.ToString();
-            this.EmployeeShow.Enabled = true;
-            this.InitLables();
-            this.InitListBox();
+            try
+            {
+                this.current_shop = this.ShopList.SelectedItem as CarShop;
+                this.CurrentShop.Text = this.current_shop.ToString();
+                this.EmployeeShow.Enabled = true;
+                this.InitObjects();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void EmployeeCreate_Click(object sender, EventArgs e)
         {
-            this.current_shop.add_empolee(
-                this.EmployeeName.Text, 
-                Convert.ToInt32(this.EmployeeSalary.Value)
-                );
-            this.InitLables();
-            this.InitListBox();
+            try
+            {
+                this.current_shop.add_empolee(
+                    this.EmployeeName.Text,
+                    Convert.ToInt32(this.EmployeeSalary.Value)
+                    );
+                this.InitObjects();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void EmployeeList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Вы точно хотите уволить этого работника?", "Уволнение", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                this.current_shop.delete_employee(this.EmployeeList.SelectedItem as Employee);
+            }
+            this.InitObjects();
         }
     }
 }

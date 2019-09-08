@@ -77,6 +77,7 @@
             this.EmployeeList.Name = "EmployeeList";
             this.EmployeeList.Size = new System.Drawing.Size(152, 173);
             this.EmployeeList.TabIndex = 0;
+            this.EmployeeList.SelectedIndexChanged += new System.EventHandler(this.EmployeeList_SelectedIndexChanged);
             // 
             // ShowCreateShop
             // 
