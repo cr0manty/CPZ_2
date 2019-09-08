@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CPZ_2
 {
-    class CarShop
+    class CarShop:IComparable
     {
         private int amount_departments;
         private string name;
@@ -27,30 +27,7 @@ namespace CPZ_2
             this.product_price = (this.avg_month_cash - this.salary) * 0.75;
         }
 
-
-        //delete employee and info about him
-        private void delete_employee(Employee _employee)
-        {
-            this.employees.Remove(_employee);
-            this.employee_amount--;
-            this.salary -= _employee.Salary;
-            this.make_cash();
-        }
-
-        //try add employee, if false - throw error. if true add information in shop
-        private void add_empolee(string _name, double _salary)
-        {
-            foreach (var i in this.employees)
-            {
-                if (i == _name)
-                    throw new Exception("Employee must be unique");
-            }
-
-            this.employees.Add(new Employee(_name, _salary));
-            this.employee_amount++;
-            this.salary += _salary;
-            this.make_cash();
-        }
+        public List<Employee> Employees { get { return employees; } }
 
         //init data
         public CarShop(string _name, string _address, int _amount_departments, int _amount_product)
@@ -68,6 +45,8 @@ namespace CPZ_2
             this.amount_product = _amount_product;
             this.make_cash();
         }
+
+
 
         //indexer for monthly income, employee salaries, and purchase costs
         public double this[int index]
@@ -93,6 +72,31 @@ namespace CPZ_2
             }
         }
 
+
+        //delete employee and info about him
+        public void delete_employee(Employee _employee)
+        {
+            this.employees.Remove(_employee);
+            this.employee_amount--;
+            this.salary -= _employee.Salary;
+            this.make_cash();
+        }
+
+        //try add employee, if false - throw error. if true add information in shop
+        public void add_empolee(string _name, double _salary)
+        {
+            foreach (var i in this.employees)
+            {
+                if (i == _name)
+                    throw new Exception("Employee must be unique");
+            }
+
+            this.employees.Add(new Employee(_name, _salary));
+            this.employee_amount++;
+            this.salary += _salary;
+            this.make_cash();
+        }
+
         //Get company profit. Default - year
         public double profit(int _month = 12)
         {
@@ -116,7 +120,7 @@ namespace CPZ_2
         //override ToString method
         public override string ToString()
         {
-            return $"{this.name} - {this.address}";
+            return this.name;
         }
 
         public bool dismiss_employee(string _name)
@@ -136,6 +140,19 @@ namespace CPZ_2
         public double annual_tax(int _rate = 17)
         {
             return this.profit(12) * _rate / 100;
+        }
+
+        public int CompareTo(object obj)
+        {
+            CarShop shop = obj as CarShop;
+            if(shop != null)
+            {
+                return this.name.CompareTo(shop.name);
+            }
+            else
+            {
+                throw new Exception("Stores are not identical!");
+            }
         }
     }
 }

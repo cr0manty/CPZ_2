@@ -35,7 +35,10 @@ namespace CPZ_2
             return false;
         }
 
-        public double Salary { get; }
-
+        public double Salary { get { return salary; } }
+        public override string ToString()
+        {
+            return this.name;
+        }
     }
 }
