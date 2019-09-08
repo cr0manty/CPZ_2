@@ -23,7 +23,10 @@ namespace CPZ_2
         {
             foreach (var i in this.employees)
                 this.avg_month_cash += i.Salary * 2.8;
+
+            this.product_price = (this.avg_month_cash - this.salary) * 0.75;
         }
+
 
         //delete employee and info about him
         private void delete_employee(Employee _employee)
@@ -57,6 +60,7 @@ namespace CPZ_2
                 throw new Exception("Something went wrong! Some field is empty or less than 0.");
 
             this.employees = new List<Employee>();
+            this.employee_amount = 0;
             this.avg_month_cash = 0;
             this.name = _name;
             this.address = _address;
@@ -65,24 +69,51 @@ namespace CPZ_2
             this.make_cash();
         }
 
-        //Get company profit. Default - year
-        public double profit(int _month_amount = 12)
+        //indexer for monthly income, employee salaries, and purchase costs
+        public double this[int index]
         {
-            return this.avg_month_cash - _month_amount * (this.product_price + this.salary);
+            get
+            {
+                if (index == 0)
+                    return this.avg_month_cash;
+                else if (index == 1)
+                    return this.salary;
+                else 
+                    return this.product_price;
+            }
+
+            set
+            {
+                if (index == 0)
+                    this.avg_month_cash = value;
+                else if (index == 1)
+                    this.salary = value;
+                else 
+                    this.product_price = value;
+            }
         }
 
+        //Get company profit. Default - year
+        public double profit(int _month = 12)
+        {
+            return (this.avg_month_cash - this.product_price - this.salary) * _month;
+        }
+
+        //overload opeartor ++ for amount employees
         public static CarShop operator ++(CarShop _car)
         {
             _car.employee_amount++;
             return _car;
         }
 
+        //overload opeartor -- for amount employees
         public static CarShop operator --(CarShop _car)
         {
-            _car.employee_amount++;
+            _car.employee_amount--;
             return _car;
         }
 
+        //override ToString method
         public override string ToString()
         {
             return $"{this.name} - {this.address}";
@@ -101,9 +132,10 @@ namespace CPZ_2
             return false;
         }
 
-        public double tax(int _rate = 17, int _month = 12)
+        //annual tax (default rate - 17%)
+        public double annual_tax(int _rate = 17)
         {
-            return this.profit(_month) * _rate / 100;
+            return this.profit(12) * _rate / 100;
         }
     }
 }
