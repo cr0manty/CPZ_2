@@ -29,7 +29,7 @@ namespace CPZ_2
             this.product_price = (this.avg_month_cash - this.salary) * 0.75;
         }
 
-        public List<Employee> Employees { get { return employees; } }
+        public List<Employee> Employees { get { return this.employees; } }
 
         //init data
         public CarShop(string _name, string _address, int _amount_departments, int _amount_product)
@@ -134,7 +134,7 @@ namespace CPZ_2
 
         public bool dismiss_employee(string _name)
         {
-            foreach(var i in employees)
+            foreach(var i in this.employees)
             {
                 if (i == _name)
                 {
